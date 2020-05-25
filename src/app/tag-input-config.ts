@@ -5,12 +5,12 @@ const tag = new TagInput('#country', {
   chip:[
    {
       "name":"Ã…land Islands",
-      "disabled":false,
+      "active":false,
       "code":"AX"
    },
    {
       "name":"Albania",
-      "disabled":true,
+      "active":true,
       "code":"AL"
    }],
   output: (data: any) => {
@@ -24,4 +24,4 @@ const response = await promise;
 const data = await response.json();
 tag.data(data);
 }
-httpReq('http://www.mocky.io/v2/5ec9044b2f0000cd43db7101', { method: 'get'});
+httpReq('http://www.mocky.io/v2/5ecbbd6c30000001acddd881', { method: 'get'});

@@ -7,21 +7,24 @@ interface IOptions {
   chip: any[];
   output?: Function;
   onChange?: Function;
+  selfAdd?: boolean;
 }
 
-interface IOption { value: string, label: string, status?: string };
+interface IOption { value: string, label: string};
 
 const defaultOptions: IOptions = {
-  chip: []
+  chip: [],
+  selfAdd: true
 }
 
 export class TagInput {
   private selector: HTMLElement;
-  public options: IOptions;
+  private options: IOptions;
   private tagId: string;
   private input!: HTMLElement;
   private chipIndex = 0;
-  private objectPattern!: {};
+  private objectPattern = {} as any;
+  //private chipData: any[];
   constructor(selector: string, options: IOptions) {
     this.selector = (document.querySelector(selector) as HTMLElement);
     this.options = { ...defaultOptions, ...options };
@@ -37,17 +40,6 @@ export class TagInput {
     </datalist>`;
     this.selector.insertAdjacentHTML('beforeend', input);
     this.input = (this.selector.querySelector(`#in_${this.tagId}`) as HTMLElement);
-    this.insertChipFromOptions();
-    this.eventRegistration();
-  }
-
-  private insertChipFromOptions() {
-    if (this.options.chip.length > 0) {
-      this.options.chip.forEach((item, index) => {
-        this.chipIndex = this.chipIndex + 1;
-        this.insertChip(item[`${this.options.option ?.value}`], index);
-      });
-    }
   }
 
   private initFromOptions() {
@@ -63,6 +55,14 @@ export class TagInput {
 
   private insertDatalist(data: any[]) {
     if (data.length < 0) throw new Error('Expecting data...');
+    if (this.options.chip.length > 0) this.insertChipFromOptions();
+    if(this.options.selfAdd) {
+    let pattern = '';
+    Object.keys(data[0]).forEach((item) => {
+      pattern += `"${item}": "",`
+    });
+    this.objectPattern = JSON.parse(`{${pattern.slice(0,-1)}}`);
+    }
     let options = '';
     data.forEach((item, index) => {
       options += (this.options.option) ?
@@ -70,6 +70,14 @@ export class TagInput {
         `<option value="${item}" data-index="${index}"></option>`
     });
     (this.selector.querySelector(`#${this.tagId}`) as HTMLElement).innerHTML = options;
+    this.eventRegistration();
+  }
+
+  private insertChipFromOptions() {
+      this.options.chip.forEach((item, index) => {
+        this.chipIndex = this.chipIndex + 1;
+        this.insertChip(item[`${this.options.option ?.value}`], index);
+      });
   }
 
   private eventRegistration() {
@@ -93,6 +101,13 @@ export class TagInput {
       this.selector.querySelectorAll('.tag')[this.options.chip.length].remove();
       this.options.output ?.call(this, this.options.chip);
     }
+    if(e.keyCode == 13 && this.options.selfAdd) {
+      if(this.options.option?.value) this.objectPattern[this.options.option?.value] = e.target.value;
+      this.options.chip.push(this.objectPattern);
+      this.chipIndex = this.chipIndex + 1;
+      this.addChip(e.target.value, this.chipIndex - 1);
+      e.target.value = '';
+    }
   }
 
   private input_onChange(e: any) {
@@ -113,7 +128,7 @@ export class TagInput {
 
   private insertChip(chip: any, i: number) {
     const chipDiv = document.createElement('div');
-    chipDiv.className = 'tag';
+    chipDiv.className = `tag`;
     chipDiv.innerHTML = chip;
     chipDiv.insertAdjacentHTML('beforeend', `<i class="chip_close" id="${i}">&#10005;</i>`);
     this.selector.insertBefore(chipDiv, this.input);
