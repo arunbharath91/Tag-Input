@@ -1,7 +1,7 @@
 import { TagInput } from "./tag-input";
 
 const tag = new TagInput('#country', {
-  option: {value: 'name', label: ''},
+  option: {value: 'name'},
   chip:[
    {
       "name":"Ã…land Islands",
@@ -13,9 +13,12 @@ const tag = new TagInput('#country', {
       "active":true,
       "code":"AL"
    }],
-  output: (data: any) => {
-  console.log(data);
-  }
+   onbeforeDelete: () => {
+   // return false or true to execute function;
+   },
+   onbeforeAdd: () => {
+     
+   }
 });
 
 const httpReq = async (url: RequestInfo, methods: RequestInit) => {

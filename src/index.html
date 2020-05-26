@@ -19,16 +19,19 @@
   <pre>
 <code>
 configuration:{
-toastData: 'Hello Sunny',
-prependTo: default is document body (or) your custom querySelector document.querySelector('yourClass'),
-timeout: 4000,
-position: 'top right',
-animate: false,
-selfClose: false
+  option?: IOption; value binder for data list option
+  disabled?: boolean; // currently not supported
+  data?: any[]; datalist from data base
+  chip?: any[]; // add a chip already present in the data base
+  output?: Function; executes for every add and remove chip
+  onChange?: Function; executes at every input change
+  onbeforeAdd?: Function; // check any additional functionalities before add. function must return true or false logic
+  onbeforeDelete?: Function; // check any additional functionalities before remove. function must return true or false logic
+  selfAdd?: boolean; // add your own tag
 }
 
-For Example:-
-toaster.warning({toastData: 'aruninfo', animate:true})
+For Reference:-
+check tag-input-config.ts
 </code>
 </pre>
   <pre>

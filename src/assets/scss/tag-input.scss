@@ -54,3 +54,7 @@ tag-chip input {
   color: #333;
   flex: 1;
 }
+tag-chip input:focus tag-chip {
+  border-color: blue;
+  
+}
