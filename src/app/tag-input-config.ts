@@ -12,13 +12,7 @@ const tag = new TagInput('#country', {
       "name":"Albania",
       "active":true,
       "code":"AL"
-   }],
-   onbeforeDelete: () => {
-   // return false or true to execute function;
-   },
-   onbeforeAdd: () => {
-     
-   }
+   }]
 });
 
 const httpReq = async (url: RequestInfo, methods: RequestInit) => {
