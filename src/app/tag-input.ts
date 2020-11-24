@@ -82,7 +82,7 @@ export class TagInput {
   private insertChipFromOptions() {
     this.chipData.forEach((item, index) => {
       this.chipIndex = this.chipIndex + 1;
-      this.insertChip(item[`${this.options.option ?.value}`], index);
+      this.insertChip(item[`${this.options.option?.value}`], index);
     });
   }
 
@@ -109,17 +109,17 @@ export class TagInput {
 
   @Debounce(2000)
   private input_onInput(e: any) {
-    this.options.onChange ?.call(this, e);
+    this.options.onChange?.call(this, e);
   }
 
   private keyboardEvents(e: any) {
     const input_Value = (e.target as HTMLInputElement).value;
     if (e.keyCode == 8 && input_Value.length <= 0 && this.chipData.length > 0) {
-      const callback = this.options.onbeforeDelete ?.call(this, this.chipData, this.options.data);
+      const callback = this.options.onbeforeDelete?.call(this, this.chipData, this.options.data);
       if (callback) {
         this.chipData.pop();
         this.selector.querySelectorAll('.tag')[this.chipData.length].remove();
-        this.options.output ?.call(this, this.chipData);
+        this.options.output?.call(this, this.chipData);
       }
 
     }
@@ -130,8 +130,8 @@ export class TagInput {
 
   private addSelfChip(e: any) {
     if (e.target.value.length <= 0) return;
-    if (this.options.option ?.value && this.dataType === 'object') {
-      this.objectPattern[this.options.option ?.value] = e.target.value;
+    if (this.options.option?.value && this.dataType === 'object') {
+      this.objectPattern[this.options.option?.value] = e.target.value;
     } else {
       this.objectPattern = e.target.value;
     }
@@ -166,21 +166,21 @@ export class TagInput {
   }
 
   private addChip(chip: any, i: number) {
-    const callback = this.options.onbeforeAdd ?.call(this, this.chipData, this.options.data);
+    const callback = this.options.onbeforeAdd?.call(this, this.chipData, this.options.data);
     if (callback) {
       this.insertChip(chip, i);
-      this.options.output ?.call(this, this.options.chip);
+      this.options.output?.call(this, this.options.chip);
     }
   }
 
   private removeChip(e: any) {
     const elem = (e.target as any);
     if (elem.className === 'chip_close') {
-      const callback = this.options.onbeforeDelete ?.call(this, this.chipData, this.options.data);
+      const callback = this.options.onbeforeDelete?.call(this, this.chipData, this.options.data);
       if (callback) {
         this.chipData.splice(elem.id, 1);
         elem.parentNode.remove();
-        this.options.output ?.call(this, this.options.chip);
+        this.options.output?.call(this, this.options.chip);
       }
 
     }
